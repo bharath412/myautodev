@@ -727,7 +727,7 @@ if prompt := st.chat_input("Ask AI, or type 'run myapp'"):
                     if isinstance(result, tuple) and len(result) == 2 and isinstance(result[1], str):
                         run_summary_md += result[1]
                         if git_operations.deploy_to_heroku_separate_terminal(PROJECT_ROOT):
-                            run_summary_md += "* ✅ App Deployed successfully"
+                            run_summary_md += "* Deploying App .."
                             #st.success(f"Attempted to deploy to Heroku from a new terminal in: {PROJECT_ROOT}")
                         else:
                             st.error(f"Failed to open a new terminal to deploy to Heroku from: {PROJECT_ROOT}")
