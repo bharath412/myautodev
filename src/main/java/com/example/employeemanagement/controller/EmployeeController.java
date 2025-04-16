@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.Instant;
 import java.util.List;
 
 @RestController
@@ -56,5 +57,12 @@ public class EmployeeController {
             return ResponseEntity.noContent().build();
         }
         return ResponseEntity.notFound().build();
+    }
+
+
+    @GetMapping("/timestamp")
+    public ResponseEntity<String> getCurrentTimestamp() {
+        String timestamp = Instant.now().toString();
+        return ResponseEntity.ok(timestamp);
     }
 }
