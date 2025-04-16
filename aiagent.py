@@ -723,7 +723,7 @@ if prompt := st.chat_input("Ask AI, or type 'run myapp'"):
                         run_summary_md += "* ▶️ Running Git operations (add, commit, push)...\n"
                         status_placeholder.info("Running Git operations...") # Update status area
                         status_placeholder.markdown(run_summary_md) # Update summary display
-                        git_operations.execute_git_flow(PROJECT_ROOT, GIT_COMMIT_MESSAGE, "")
+                        run_summary_md += git_operations.execute_git_flow(PROJECT_ROOT, GIT_COMMIT_MESSAGE, "")
                         # Create a placeholder for git status updates
                         git_status_placeholder = st.empty()
                         
