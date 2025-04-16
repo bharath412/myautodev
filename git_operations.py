@@ -3,79 +3,131 @@ import subprocess
 import streamlit as st
 from pathlib import Path
 
-def run_git_command(command, cwd, placeholder):
-    """Runs a git command and captures output."""
+def run_git_command(command, cwd, status_placeholder=None):
+    """Run a git command and return output and success status"""
     try:
-        placeholder.write(f"> git {' '.join(command)}")
+        # Convert Path object to string for subprocess
+        cwd_str = str(cwd)
+        
+        # Add git command prefix if not present
+        if not command[0].startswith('git'):
+            command = ['git'] + command
+
         process = subprocess.run(
-            ["git"] + command,
-            cwd=cwd,
-            capture_output=True,
+            command,
+            cwd=cwd_str,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
             text=True,
-            check=True, # Raise exception on non-zero exit code
-            encoding='utf-8',
-            errors='replace'
+            check=True
         )
-        output = process.stdout.strip()
-        if output:
-             placeholder.code(output, language='bash')
-        return True, process.stdout + process.stderr # Return full output including stderr
-    except FileNotFoundError:
-        err_msg = "Error: 'git' command not found. Is Git installed and in PATH?"
-        placeholder.error(err_msg)
-        return False, err_msg
+        
+        output = process.stdout + process.stderr
+        if status_placeholder:
+            status_placeholder.success(f"✅ {' '.join(command)}")
+            status_placeholder.code(output)  # Show command output
+        return output, True
     except subprocess.CalledProcessError as e:
-        err_msg = f"Git command failed:\n{e.stderr}\n{e.stdout}"
-        placeholder.error(err_msg)
-        return False, err_msg
+        error_msg = f"Error: {e.stderr}"
+        if status_placeholder:
+            status_placeholder.error(f"❌ {' '.join(command)} failed")
+            status_placeholder.code(error_msg)
+        return error_msg, False
+
+def ensure_git_configured(cwd):
+    """Verify git configuration"""
+    try:
+        # Check git installation
+        version_cmd = subprocess.run(
+            ['git', '--version'], 
+            capture_output=True, 
+            text=True
+        )
+        if version_cmd.returncode != 0:
+            return False, "Git is not installed or not in PATH"
+
+        # Check repository
+        git_dir = Path(cwd) / '.git'
+        if not git_dir.is_dir():
+            return False, f"Not a git repository in {cwd}"
+
+        # Check config
+        config_cmd = subprocess.run(
+            ['git', 'config', '--list'],
+            cwd=str(cwd),
+            capture_output=True,
+            text=True
+        )
+        
+        if 'user.name' not in config_cmd.stdout or 'user.email' not in config_cmd.stdout:
+            return False, "Git user.name or user.email not configured"
+
+        # Check remote
+        remote_cmd = subprocess.run(
+            ['git', 'remote', '-v'],
+            cwd=str(cwd),
+            capture_output=True,
+            text=True
+        )
+        
+        if 'origin' not in remote_cmd.stdout:
+            return False, "No remote 'origin' configured"
+
+        return True, "Git properly configured"
     except Exception as e:
-        err_msg = f"An error occurred during git operation: {e}"
-        placeholder.error(err_msg)
-        return False, err_msg
+        return False, f"Git configuration error: {str(e)}"
 
-def execute_git_flow(repo_url, commit_message, placeholder):
-    """Placeholder for git add, commit, push flow."""
-    repo_path = Path(".") # Assuming run from project root
-    full_log = f"--- Git Operations Log for commit: '{commit_message}' ---\n"
-    success_overall = True
+def execute_git_flow(project_root, commit_message, placeholder):
+    """Execute git add, commit, push flow"""
+    if not isinstance(project_root, Path):
+        project_root = Path(project_root)
 
-    placeholder.info("Running Git operations...")
+    # Ensure we're in a git repository
+    if not (project_root / '.git').is_dir():
+        placeholder.error("Not a git repository!")
+        return False, "Not a git repository"
 
-    # Git Add
-    success, log = run_git_command(["add", "."], repo_path, placeholder)
-    full_log += f"\n> git add .\n{log}\n"
-    if not success:
-        success_overall = False
-        placeholder.error("Git add failed.")
-        return False, full_log
+    # 1. Git status
+    status_output, status_ok = run_git_command(['status'], project_root, placeholder)
+    if not status_ok:
+        return False, status_output
 
-    # Git Commit
-    success, log = run_git_command(["commit", "-m", commit_message], repo_path, placeholder)
-    full_log += f"\n> git commit -m \"{commit_message}\"\n{log}\n"
-    if not success:
-        # It might fail if there's nothing to commit, which isn't necessarily an error
-        if "nothing to commit, working tree clean" in log:
-             placeholder.warning("Nothing new to commit.")
-             # Continue as this is not a failure in the flow
-        else:
-             success_overall = False
-             placeholder.error("Git commit failed.")
-             return False, full_log
+    # 2. Git add
+    add_output, add_ok = run_git_command(['add', '.'], project_root, placeholder)
+    if not add_ok:
+        return False, add_output
 
-    # Git Push (assuming 'origin' and 'main' or 'master' branch)
-    # You might need to determine the current branch dynamically
-    current_branch = 'main' # Or 'master', or detect dynamically
-    success, log = run_git_command(["push", "origin", current_branch], repo_path, placeholder)
-    full_log += f"\n> git push origin {current_branch}\n{log}\n"
-    if not success:
-        success_overall = False
-        placeholder.error("Git push failed.")
-        return False, full_log
+    # 3. Git status after add
+    status_output, _ = run_git_command(['status'], project_root, placeholder)
+    if "nothing to commit" in status_output:
+        placeholder.info("No changes to commit")
+        return True, "No changes to commit"
 
-    if success_overall:
-        placeholder.success("Git operations completed successfully.")
-    else:
-         placeholder.error("One or more Git operations failed.")
+    # 4. Git commit
+    commit_output, commit_ok = run_git_command(
+        ['commit', '-m', commit_message], 
+        project_root, 
+        placeholder
+    )
+    if not commit_ok:
+        return False, commit_output
 
+    # 5. Git pull to avoid conflicts
+    pull_output, pull_ok = run_git_command(
+        ['pull', 'origin', 'main'], 
+        project_root, 
+        placeholder
+    )
+    if not pull_ok:
+        return False, pull_output
 
-    return success_overall, full_log + "\n--- End Git Log ---"
+    # 6. Git push
+    push_output, push_ok = run_git_command(
+        ['push', 'origin', 'main'], 
+        project_root, 
+        placeholder
+    )
+    if not push_ok:
+        return False, push_output
+
+    return True, "Git operations completed successfully"

@@ -42,20 +42,20 @@ if not API_KEY:
 genai.configure(api_key=API_KEY)
 
 # 2. Project Path
-PROJECT_ROOT_PATH = "E:/ERP/dev/CursorAI2/autodevjava" # <-- Your project root
+PROJECT_ROOT_PATH = "E:/ERP/dev/CursorAI2/myautodev" # <-- Your project root
 PROJECT_ROOT = Path(PROJECT_ROOT_PATH) # Use Path object
 if not PROJECT_ROOT.is_dir():
     st.error(f"🚨 Project Root Path not found or is not a directory: {PROJECT_ROOT_PATH}")
     st.warning("Please update the `PROJECT_ROOT_PATH` variable in the script.")
     st.stop()
 # 2. Git Configuration
-GIT_REPO_URL = "https://github.com/bharath412/autodevjava.git" # Replace if needed
+GIT_REPO_URL = "https://github.com/bharath412/myautodev.git" # Replace if needed
 GIT_COMMIT_MESSAGE = "feat: AI-assisted code changes and test updates"# Define common source directories
 JAVA_SRC_DIRS = ['src/main/java', 'src/test/java']
 STATIC_SRC_DIR = 'src/main/resources/static' # <--- Static dir
 
 # 3. Robot Framework Tests Path
-ROBOT_TESTS_PATH_STR = "E:/ERP/dev/CursorAI2/autodevjava/src/test/robotframework" # Using full path now for clarity
+ROBOT_TESTS_PATH_STR = "E:/ERP/dev/CursorAI2/myautodev/src/test/robotframework" # Using full path now for clarity
 full_robot_path = Path(ROBOT_TESTS_PATH_STR) # Use the full path directly
 relative_robot_path_str = "src/test/robotframework" # Define the typical relative path
 if not full_robot_path.is_dir():
@@ -739,39 +739,68 @@ if prompt := st.chat_input("Ask AI, or type 'run myapp'"):
                                         git_success = True
                                         git_output = ""
                                         
-                                        # 1. Git Add
-                                        add_output, add_success = git_operations.run_git_command(
-                                            ["git", "add", "."], PROJECT_ROOT, git_status_placeholder
-                                        )
-                                        git_output += add_output
-                                        git_success = git_success and add_success
-                                        
-                                        # 2. Git Commit
-                                        commit_output, commit_success = git_operations.run_git_command(
-                                            ["git", "commit", "-m", GIT_COMMIT_MESSAGE], PROJECT_ROOT, git_status_placeholder
-                                        )
-                                        git_output += "\n" + commit_output
-                                        git_success = git_success and commit_success
-                                        
-                                        # 3. Git Push
-                                        push_output, push_success = git_operations.run_git_command(
-                                            ["git", "push", "-u", "origin", "main"], PROJECT_ROOT, git_status_placeholder
-                                        )
-                                        git_output += "\n" + push_output
-                                        git_success = git_success and push_success
-                                        
-                                        # Display results
-                                        if git_success:
-                                            git_status_placeholder.success("✅ All git operations completed successfully!")
-                                            run_summary_md += "* ✅ Git operations completed successfully.\n"
-                                            status_placeholder.success("Git operations completed.")
+                                        # Before running git commands, check configuration
+                                        git_config_ok, git_config_msg = git_operations.ensure_git_configured(PROJECT_ROOT)
+                                        if not git_config_ok:
+                                            git_status_placeholder.error(f"Git configuration error: {git_config_msg}")
+                                            run_summary_md += f"* ❌ Git operations failed: {git_config_msg}\n"
+                                            status_placeholder.error("Git configuration error.")
                                         else:
-                                            git_status_placeholder.error("❌ One or more git operations failed.")
-                                            run_summary_md += "* ❌ Git operations failed.\n"
-                                            status_placeholder.error("Git operations failed.")
-                                        
-                                        # Show detailed output
-                                        git_status_placeholder.markdown(f"````\n{git_output}\n````")
+                                            # Initialize git operations
+                                            git_success = True
+                                            git_output = ""
+                                            
+                                            # 1. Git Status (check for changes)
+                                            status_output, status_success = git_operations.run_git_command(
+                                                ["git", "status"], PROJECT_ROOT, git_status_placeholder
+                                            )
+                                            git_output += status_output
+                                            
+                                            if "nothing to commit" in status_output:
+                                                git_status_placeholder.info("No changes to commit")
+                                                run_summary_md += "* ℹ️ No changes to commit\n"
+                                            else:
+                                                # 2. Git Add
+                                                add_output, add_success = git_operations.run_git_command(
+                                                    ["git", "add", "."], PROJECT_ROOT, git_status_placeholder
+                                                )
+                                                git_output += "\n" + add_output
+                                                git_success = git_success and add_success
+                                                
+                                                if add_success:
+                                                    # 3. Git Commit
+                                                    commit_output, commit_success = git_operations.run_git_command(
+                                                        ["git", "commit", "-m", GIT_COMMIT_MESSAGE], PROJECT_ROOT, git_status_placeholder
+                                                    )
+                                                    git_output += "\n" + commit_output
+                                                    git_success = git_success and commit_success
+                                                    
+                                                    if commit_success:
+                                                        # 4. Git Pull before Push (to avoid conflicts)
+                                                        pull_output, pull_success = git_operations.run_git_command(
+                                                            ["git", "pull", "origin", "main"], PROJECT_ROOT, git_status_placeholder
+                                                        )
+                                                        git_output += "\n" + pull_output
+                                                        
+                                                        # 5. Git Push
+                                                        push_output, push_success = git_operations.run_git_command(
+                                                            ["git", "push", "origin", "main"], PROJECT_ROOT, git_status_placeholder
+                                                        )
+                                                        git_output += "\n" + push_output
+                                                        git_success = git_success and push_success
+
+                                            # Display results
+                                            if git_success:
+                                                git_status_placeholder.success("✅ All git operations completed successfully!")
+                                                run_summary_md += "* ✅ Git operations completed successfully.\n"
+                                                status_placeholder.success("Git operations completed.")
+                                            else:
+                                                git_status_placeholder.error("❌ One or more git operations failed.")
+                                                run_summary_md += "* ❌ Git operations failed.\n"
+                                                status_placeholder.error("Git operations failed.")
+                                            
+                                            # Show detailed output
+                                            git_status_placeholder.markdown(f"```\n{git_output}\n```")
                                         
                             except Exception as e:
                                 git_status_placeholder.error(f"❌ Error during git operations: {str(e)}")
