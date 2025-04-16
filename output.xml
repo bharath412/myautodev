@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generator="Robot 6.1.1 (Python 3.13.2 on win32)" generated="20250416 09:39:17.538" rpa="false" schemaversion="4">
+<suite id="s1" name="Robotframework" source="E:\ERP\dev\CursorAI2\autodevjava\src\test\robotframework">
+<suite id="s1-s1" name="Employee Tests" source="E:\ERP\dev\CursorAI2\autodevjava\src\test\robotframework\employee_tests.robot">
+<kw name="Setup Test Suite" type="SETUP">
+<kw name="Set Selenium Timeout" library="SeleniumLibrary">
+<arg>30 seconds</arg>
+<doc>Sets the timeout that is used by various keywords.</doc>
+<status status="PASS" starttime="20250416 09:39:19.080" endtime="20250416 09:39:19.080"/>
+</kw>
+<kw name="Set Selenium Speed" library="SeleniumLibrary">
+<arg>0.2 seconds</arg>
+<doc>Sets the delay that is waited after each Selenium command.</doc>
+<status status="PASS" starttime="20250416 09:39:19.080" endtime="20250416 09:39:19.080"/>
+</kw>
+<kw name="Set Selenium Implicit Wait" library="SeleniumLibrary">
+<arg>5 seconds</arg>
+<doc>Sets the implicit wait value used by Selenium.</doc>
+<status status="PASS" starttime="20250416 09:39:19.081" endtime="20250416 09:39:19.081"/>
+</kw>
+<kw name="Create Session" library="RequestsLibrary">
+<arg>employee_api</arg>
+<arg>${BASE_URL}</arg>
+<arg>verify=True</arg>
+<arg>disable_warnings=1</arg>
+<doc>Create Session: create a HTTP session to a server</doc>
+<msg timestamp="20250416 09:39:19.081" level="INFO">Creating Session using : alias=employee_api, url=http://localhost:8081, headers={},                     cookies={}, auth=None, timeout=None, proxies=None, verify=True,                     debug=0 </msg>
+<status status="PASS" starttime="20250416 09:39:19.081" endtime="20250416 09:39:19.081"/>
+</kw>
+<kw name="Open Browser" library="SeleniumLibrary">
+<arg>${FRONTEND_URL}</arg>
+<arg>${BROWSER}</arg>
+<doc>Opens a new browser instance to the optional ``url``.</doc>
+<msg timestamp="20250416 09:39:19.082" level="INFO">Opening browser 'edge' to base url 'http://localhost:8081'.</msg>
+<status status="PASS" starttime="20250416 09:39:19.081" endtime="20250416 09:39:33.805"/>
+</kw>
+<kw name="Maximize Browser Window" library="SeleniumLibrary">
+<doc>Maximizes current browser window.</doc>
+<status status="PASS" starttime="20250416 09:39:33.806" endtime="20250416 09:39:34.065"/>
+</kw>
+<kw name="Set Window Size" library="SeleniumLibrary">
+<arg>1920</arg>
+<arg>1080</arg>
+<doc>Sets current windows size to given ``width`` and ``height``.</doc>
+<status status="PASS" starttime="20250416 09:39:34.066" endtime="20250416 09:39:34.766"/>
+</kw>
+<kw name="Sleep" library="BuiltIn">
+<arg>1s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<msg timestamp="20250416 09:39:35.767" level="INFO">Slept 1 second</msg>
+<status status="PASS" starttime="20250416 09:39:34.766" endtime="20250416 09:39:35.767"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>Starting test suite on ${BASE_URL}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20250416 09:39:35.767" level="INFO">Starting test suite on http://localhost:8081</msg>
+<status status="PASS" starttime="20250416 09:39:35.767" endtime="20250416 09:39:35.767"/>
+</kw>
+<kw name="GET On Session" library="RequestsLibrary">
+<var>${response}</var>
+<arg>employee_api</arg>
+<arg>/api/employees</arg>
+<arg>expected_status=any</arg>
+<doc>Sends a GET request on a previously created HTTP Session.</doc>
+<msg timestamp="20250416 09:39:35.795" level="INFO">GET Request : url=http://localhost:8081/api/employees 
+ path_url=/api/employees 
+ headers={'User-Agent': 'python-requests/2.32.3', 'Accept-Encoding': 'gzip, deflate, zstd', 'Accept': '*/*', 'Connection': 'keep-alive'} 
+ body=None 
+ </msg>
+<msg timestamp="20250416 09:39:35.795" level="INFO">GET Response : url=http://localhost:8081/api/employees 
+ status=200, reason= 
+ headers={'Content-Type': 'application/json', 'Transfer-Encoding': 'chunked', 'Date': 'Wed, 16 Apr 2025 04:09:35 GMT', 'Keep-Alive': 'timeout=60', 'Connection': 'keep-alive'} 
+ body=[{"id":6,"firstName":"Rodney","lastName":"Bean","email":"ahernandez@example.net","department":"Teacher, music"},{"id":8,"firstName":"Sydney","lastName":"Barrett","email":"reidaustin@example.org","department":"Designer, graphic"},{"id":9,"firstName":"Catherine","lastName":"Levy","email":"kurtchang@example.net","department":"Lecturer, further education"},{"id":12,"firstName":"Scott","lastName":"Payne","email":"clarklinda@example.org","department":"Materials engineer"},{"id":13,"firstName":"Jill","lastName":"Pugh","email":"michaelmason@example.com","department":"Travel agency manager"},{"id":15,"firstName":"Andre","lastName":"Kane","email":"jessica71@example.net","department":"Teacher, primary school"},{"id":20,"firstName":"Monica","lastName":"Anderson","email":"amandarobinson@example.org","department":"Health and safety inspector"},{"id":22,"firstName":"Krista","lastName":"Mckay","email":"rileylisa@example.org","department":"Product/process development scientist"},{"id":27,"firstName":"Henry","lastName":"Buckley","email":"michaelhall@example.com","department":"Health visitor"},{"id":29,"firstName":"Heather","lastName":"Smith","email":"hessanthony@example.com","department":"Computer games developer"},{"id":30,"firstName":"Monica","lastName":"Garner","email":"katherineporter@example.net","department":"English as a foreign language teacher"},{"id":33,"firstName":"Michelle","lastName":"Mcgee","email":"thomas01@example.org","department":"Surveyor, building"},{"id":34,"firstName":"Gloria","lastName":"Powell","email":"laurenwhite@example.net","department":"Physiotherapist"},{"id":35,"firstName":"Donald","lastName":"Robinson","email":"jeremy03@example.net","department":"Volunteer coordinator"},{"id":36,"firstName":"Victoria","lastName":"Wells","email":"sherri11@example.org","department":"Systems developer"},{"id":37,"firstName":"Diana","lastName":"Benitez","email":"bbush@example.com","department":"Recruitment consultant"},{"id":39,"firstName":"William","lastName":"May","email":"xnichols@example.net","department":"Sports coach"},{"id":41,"firstName":"Janice","lastName":"Hammond","email":"jgreen@example.com","department":"Financial trader"},{"id":42,"firstName":"Mark","lastName":"Melton","email":"sroach@example.net","department":"Youth worker"},{"id":48,"firstName":"Heather","lastName":"Smith","email":"janicepage@example.com","department":"Biomedical scientist"},{"id":50,"firstName":"Maria","lastName":"Johnson","email":"amber11@example.com","department":"Brewing technologist"},{"id":51,"firstName":"Walter","lastName":"Yates","email":"randyrose@example.org","department":"Research officer, political party"},{"id":53,"firstName":"Adam","lastName":"Kennedy","email":"jgreen@example.org","department":"Engineer, water"},{"id":54,"firstName":"Christopher","lastName":"Camacho","email":"rachael60@example.com","department":"Structural engineer"},{"id":126,"firstName":"Cynthia","lastName":"Adams","email":"woodsandra@example.net","department":"Jewellery designer"},{"id":128,"firstName":"Kara","lastName":"Blackwell","email":"brett78@example.com","department":"Administrator"},{"id":59,"firstName":"Michael","lastName":"Smith","email":"scottmontgomery@example.com","department":"Dentist"},{"id":130,"firstName":"Erica","lastName":"Wood","email":"wmurray@example.com","department":"Surveyor, commercial/residential"},{"id":61,"firstName":"Edward","lastName":"Hester","email":"joshua90@example.com","department":"Dentist"},{"id":131,"firstName":"Paul","lastName":"Hernandez","email":"patrick92@example.com","department":"Engineer, materials"},{"id":65,"firstName":"Christopher","lastName":"Payne","email":"laratimothy@example.org","department":"Personal assistant"},{"id":134,"firstName":"Anthony","lastName":"Lambert","email":"codybrown@example.net","department":"Building services engineer"},{"id":135,"firstName":"Justin","lastName":"Greene","email":"heatherbrown@example.com","department":"Dispensing optician"},{"id":68,"firstName":"William","lastName":"Mcconnell","email":"johnpierce@example.net","department":"Barrister's clerk"},{"id":136,"firstName":"Michael","lastName":"Brown","email":"kochoa@example.org","department":"Chief Operating Officer"},{"id":137,"firstName":"Angela","lastName":"Mueller","email":"carloshouse@example.net","department":"Clinical cytogeneticist"},{"id":138,"firstName":"Shaun","lastName":"Kramer","email":"sarahrogers@example.org","department":"Furniture conservator/restorer"},{"id":75,"firstName":"Christopher","lastName":"Lane","email":"ghenderson@example.org","department":"Restaurant manager, fast food"},{"id":139,"firstName":"Theresa","lastName":"Davis","email":"mirandadominguez@example.org","department":"Metallurgist"},{"id":140,"firstName":"Victoria","lastName":"Salazar","email":"morgan55@example.com","department":"Event organiser"},{"id":141,"firstName":"William","lastName":"Pena","email":"wgreene@example.org","department":"IT sales professional"},{"id":84,"firstName":"Angela","lastName":"Cabrera","email":"efisher@example.org","department":"Journalist, newspaper"},{"id":86,"firstName":"Michael","lastName":"Bowen","email":"xmorse@example.net","department":"Architectural technologist"},{"id":95,"firstName":"Melissa","lastName":"Webb","email":"douglasmiller@example.org","department":"Cytogeneticist"}] 
+ </msg>
+<msg timestamp="20250416 09:39:35.795" level="INFO">${response} = &lt;Response [200]&gt;</msg>
+<status status="PASS" starttime="20250416 09:39:35.767" endtime="20250416 09:39:35.795"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>API Response Status: ${response.status_code}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20250416 09:39:35.797" level="INFO">API Response Status: 200</msg>
+<status status="PASS" starttime="20250416 09:39:35.796" endtime="20250416 09:39:35.797"/>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<arg>'${response.status_code}' != '200'</arg>
+<arg>Fatal Error</arg>
+<arg>API not responding correctly</arg>
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<status status="PASS" starttime="20250416 09:39:35.797" endtime="20250416 09:39:35.798"/>
+</kw>
+<status status="PASS" starttime="20250416 09:39:19.080" endtime="20250416 09:39:35.798"/>
+</kw>
+<test id="s1-s1-t1" name="Verify Page Title" line="138">
+<kw name="Go To" library="SeleniumLibrary">
+<arg>${FRONTEND_URL}</arg>
+<doc>Navigates the current browser window to the provided ``url``.</doc>
+<msg timestamp="20250416 09:39:35.799" level="INFO">Opening url 'http://localhost:8081'</msg>
+<status status="PASS" starttime="20250416 09:39:35.799" endtime="20250416 09:39:42.154"/>
+</kw>
+<kw name="Get Title" library="SeleniumLibrary">
+<var>${title}</var>
+<doc>Returns the title of the current page.</doc>
+<msg timestamp="20250416 09:39:42.385" level="INFO">${title} = Employee Management</msg>
+<status status="PASS" starttime="20250416 09:39:42.156" endtime="20250416 09:39:42.385"/>
+</kw>
+<kw name="Should Be Equal" library="BuiltIn">
+<arg>${title}</arg>
+<arg>Employee Management</arg>
+<doc>Fails if the given objects are unequal.</doc>
+<status status="PASS" starttime="20250416 09:39:42.386" endtime="20250416 09:39:42.386"/>
+</kw>
+<kw name="Title Should Be" library="SeleniumLibrary">
+<arg>Employee Management</arg>
+<doc>Verifies that the current page title equals ``title``.</doc>
+<msg timestamp="20250416 09:39:42.606" level="INFO">Page title is 'Employee Management'.</msg>
+<status status="PASS" starttime="20250416 09:39:42.387" endtime="20250416 09:39:42.606"/>
+</kw>
+<status status="PASS" starttime="20250416 09:39:35.798" endtime="20250416 09:39:42.606"/>
+</test>
+<test id="s1-s1-t2" name="Verify Navigation" line="144">
+<kw name="Go To" library="SeleniumLibrary">
+<arg>${FRONTEND_URL}</arg>
+<doc>Navigates the current browser window to the provided ``url``.</doc>
+<msg timestamp="20250416 09:39:42.607" level="INFO">Opening url 'http://localhost:8081'</msg>
+<status status="PASS" starttime="20250416 09:39:42.607" endtime="20250416 09:39:47.545"/>
+</kw>
+<kw name="Wait Until Element Is Visible" library="SeleniumLibrary">
+<arg>${NAVBAR_BRAND}</arg>
+<doc>Waits until the element ``locator`` is visible.</doc>
+<status status="PASS" starttime="20250416 09:39:47.545" endtime="20250416 09:39:48.016"/>
+</kw>
+<kw name="Element Text Should Be" library="SeleniumLibrary">
+<arg>${NAVBAR_BRAND}</arg>
+<arg>Employee Management</arg>
+<doc>Verifies that element ``locator`` contains exact the text ``expected``.</doc>
+<msg timestamp="20250416 09:39:48.017" level="INFO">Verifying element 'css:.navbar-brand' contains exact text 'Employee Management'.</msg>
+<status status="PASS" starttime="20250416 09:39:48.016" endtime="20250416 09:39:48.447"/>
+</kw>
+<kw name="Element Should Be Visible" library="SeleniumLibrary">
+<arg>${ADD_EMPLOYEE_NAV}</arg>
+<doc>Verifies that the element identified by ``locator`` is visible.</doc>
+<msg timestamp="20250416 09:39:48.874" level="INFO">Element 'id:addEmployeeNav' is displayed.</msg>
+<status status="PASS" starttime="20250416 09:39:48.447" endtime="20250416 09:39:48.874"/>
+</kw>
+<kw name="Element Should Be Visible" library="SeleniumLibrary">
+<arg>${EMPLOYEE_LIST_NAV}</arg>
+<doc>Verifies that the element identified by ``locator`` is visible.</doc>
+<msg timestamp="20250416 09:39:49.298" level="INFO">Element 'id:employeeListNav' is displayed.</msg>
+<status status="PASS" starttime="20250416 09:39:48.874" endtime="20250416 09:39:49.298"/>
+</kw>
+<kw name="Element Text Should Be" library="SeleniumLibrary">
+<arg>${ADD_EMPLOYEE_NAV}</arg>
+<arg>Add Employee</arg>
+<doc>Verifies that element ``locator`` contains exact the text ``expected``.</doc>
+<msg timestamp="20250416 09:39:49.299" level="INFO">Verifying element 'id:addEmployeeNav' contains exact text 'Add Employee'.</msg>
+<status status="PASS" starttime="20250416 09:39:49.299" endtime="20250416 09:39:49.723"/>
+</kw>
+<kw name="Element Text Should Be" library="SeleniumLibrary">
+<arg>${EMPLOYEE_LIST_NAV}</arg>
+<arg>Employee List</arg>
+<doc>Verifies that element ``locator`` contains exact the text ``expected``.</doc>
+<msg timestamp="20250416 09:39:49.723" level="INFO">Verifying element 'id:employeeListNav' contains exact text 'Employee List'.</msg>
+<status status="PASS" starttime="20250416 09:39:49.723" endtime="20250416 09:39:50.145"/>
+</kw>
+<status status="PASS" starttime="20250416 09:39:42.607" endtime="20250416 09:39:50.145"/>
+</test>
+<kw name="Close All Browsers" library="SeleniumLibrary" type="TEARDOWN">
+<doc>Closes all open browsers and resets the browser cache.</doc>
+<status status="PASS" starttime="20250416 09:39:50.145" endtime="20250416 09:39:52.498"/>
+</kw>
+<status status="PASS" starttime="20250416 09:39:17.577" endtime="20250416 09:39:52.498"/>
+</suite>
+<status status="PASS" starttime="20250416 09:39:17.540" endtime="20250416 09:39:52.500"/>
+</suite>
+<statistics>
+<total>
+<stat pass="2" fail="0" skip="0">All Tests</stat>
+</total>
+<tag>
+</tag>
+<suite>
+<stat pass="2" fail="0" skip="0" id="s1" name="Robotframework">Robotframework</stat>
+<stat pass="2" fail="0" skip="0" id="s1-s1" name="Employee Tests">Robotframework.Employee Tests</stat>
+</suite>
+</statistics>
+<errors>
+</errors>
+</robot>
