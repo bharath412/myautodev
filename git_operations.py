@@ -207,4 +207,4 @@ def run_command_separate_terminal(project_root,command_list, cwd):
 def deploy_to_heroku_separate_terminal(project_root):
     """Opens a new terminal and runs 'git push heroku main' in the given project root."""
     command = ["git", "push", "heroku", "main"]
-    return run_command_separate_terminal(command, project_root)
+    return run_command_separate_terminal(project_root,command, project_root)
