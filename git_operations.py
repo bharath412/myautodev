@@ -2,6 +2,11 @@
 import subprocess
 import streamlit as st
 from pathlib import Path
+import subprocess
+import platform
+from pathlib import Path
+import shlex
+import streamlit as st
 
 def run_git_command(command, cwd, status_placeholder=None):
     """Run a git command and return output and success status"""
@@ -131,3 +136,75 @@ def execute_git_flow(project_root, commit_message, placeholder):
         return False, push_output
 
     return True, "Git operations completed successfully"
+
+# Assuming PROJECT_ROOT is defined in your main script or passed as an argument
+# Example (you might not define it here):
+# PROJECT_ROOT = Path("./my_heroku_app")
+
+def run_command_separate_terminal(project_root,command_list, cwd):
+    """Tries to run a command in a new terminal window."""
+    # Security Check on CWD
+    if not Path(cwd).resolve().is_relative_to(project_root.resolve()):
+        st.error(f"Security Error: Attempting to run command outside project root CWD: {cwd}")
+        return False
+
+    system = platform.system()
+    st.write(f"Attempting to run `{' '.join(command_list)}` in new terminal (OS: {system}, CWD: {cwd})")
+    try:
+        if system == "Windows":
+            full_command = "cmd /c start cmd /k " + " ".join(command_list)
+            subprocess.Popen(full_command, cwd=cwd, shell=True, creationflags=subprocess.CREATE_NEW_CONSOLE)
+            return True
+        elif system == "Darwin": # macOS
+            cwd_escaped = shlex.quote(str(cwd))
+            cmd_string = " ".join(command_list)
+            cmd_escaped_applescript = cmd_string.replace('\\', '\\\\').replace('"', '\\"')
+            script = f'tell application "Terminal" to do script "cd {cwd_escaped} && {cmd_escaped_applescript}" activate'
+            proc = subprocess.Popen(['osascript', '-e', script], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            stdout, stderr = proc.communicate(timeout=10) # Add timeout
+            if proc.returncode != 0:
+                st.error(f"osascript failed: {stderr.decode(errors='replace')}")
+                return False
+            return True
+        elif system == "Linux":
+            quoted_cmd_list = [shlex.quote(part) for part in command_list]
+            quoted_cwd = shlex.quote(str(cwd))
+            cmd_string_linux = " ".join(quoted_cmd_list)
+
+            terminals = [
+                {"cmd": ["gnome-terminal", "--working-directory", str(cwd), "--"] + command_list},
+                {"cmd": ["konsole", "--workdir", str(cwd), "-e"] + command_list},
+                {"cmd": ["xterm", "-hold", "-e", f"sh -c 'cd {quoted_cwd} && {cmd_string_linux}'"]}, # Wrap in sh -c
+                {"cmd": ["terminator", "--working-directory", str(cwd), "-e", cmd_string_linux, "-x", "bash", "-c", "read -p 'Press Enter to close...'"]}, # Example for terminator
+            ]
+            launched = False
+            for term_info in terminals:
+                term_cmd = term_info["cmd"]
+                try:
+                    st.write(f"Trying terminal command: {' '.join(term_cmd)}")
+                    subprocess.Popen(term_cmd)
+                    launched = True
+                    break # Success
+                except FileNotFoundError:
+                    pass # Try the next terminal
+                except Exception as e:
+                    st.warning(f"Failed to launch with {term_cmd[0]}: {e}")
+                    # Continue trying others
+
+            if not launched:
+                st.error("Could not find a known terminal emulator (gnome-terminal, konsole, xterm, terminator). Please run the command manually.")
+                return False
+            return True # Launched successfully with one of the terminals
+        else:
+            st.error(f"Unsupported operating system for separate terminal: {system}")
+            return False
+    except subprocess.TimeoutExpired:
+        st.error("Timed out waiting for terminal command to launch.")
+    except Exception as e:
+        st.error(f"Failed to start command in new terminal: {e}")
+    return False
+
+def deploy_to_heroku_separate_terminal(project_root):
+    """Opens a new terminal and runs 'git push heroku main' in the given project root."""
+    command = ["git", "push", "heroku", "main"]
+    return run_command_separate_terminal(command, project_root)

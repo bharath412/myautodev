@@ -726,11 +726,18 @@ if prompt := st.chat_input("Ask AI, or type 'run myapp'"):
                         result = git_operations.execute_git_flow(PROJECT_ROOT, GIT_COMMIT_MESSAGE, "")
                     if isinstance(result, tuple) and len(result) == 2 and isinstance(result[1], str):
                         run_summary_md += result[1]
+                        if git_operations.deploy_to_heroku_separate_terminal(PROJECT_ROOT):
+                            st.success(f"Attempted to deploy to Heroku from a new terminal in: {PROJECT_ROOT}")
+                        else:
+                            st.error(f"Failed to open a new terminal to deploy to Heroku from: {PROJECT_ROOT}")
+
                     else:
                         # Handle the case where the return is not the expected tuple
                         print(f"Warning: execute_git_flow returned unexpected type or format: {type(result)}, value: {result}")
                         # You might want to assign an empty string or handle this differently
                         pass
+                    
+                        
                         # Create a placeholder for git status updates
                         git_status_placeholder = st.empty()
                         
