@@ -814,9 +814,9 @@ if prompt := st.chat_input("Ask AI, or type 'run myapp'"):
                                 run_summary_md += f"* ❌ Git operations failed: {str(e)}\n"
                                 status_placeholder.error("Git operations failed.")
                                 git_success = False
-                    if robot_path_valid: # Only add skip message if tests were actually run and failed
-                         run_summary_md += "* ⏭️ Skipping Git operations due to failed tests.\n"
-                         status_placeholder.warning("Skipping Git operations due to failed tests.")
+                        elif robot_path_valid: # Only add skip message if tests were actually run and failed
+                            run_summary_md += "* ⏭️ Skipping Git operations due to failed tests.\n"
+                            status_placeholder.warning("Skipping Git operations due to failed tests.")
 
 
                 else: # Port not active
