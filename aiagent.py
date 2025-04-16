@@ -723,7 +723,14 @@ if prompt := st.chat_input("Ask AI, or type 'run myapp'"):
                         run_summary_md += "* ▶️ Running Git operations (add, commit, push)...\n"
                         status_placeholder.info("Running Git operations...") # Update status area
                         status_placeholder.markdown(run_summary_md) # Update summary display
-                        run_summary_md += git_operations.execute_git_flow(PROJECT_ROOT, GIT_COMMIT_MESSAGE, "")
+                        result = git_operations.execute_git_flow(PROJECT_ROOT, GIT_COMMIT_MESSAGE, "")
+                    if isinstance(result, tuple) and len(result) == 2 and isinstance(result[1], str):
+                        run_summary_md += result[1]
+                    else:
+                        # Handle the case where the return is not the expected tuple
+                        print(f"Warning: execute_git_flow returned unexpected type or format: {type(result)}, value: {result}")
+                        # You might want to assign an empty string or handle this differently
+                        pass
                         # Create a placeholder for git status updates
                         git_status_placeholder = st.empty()
                         
@@ -807,7 +814,7 @@ if prompt := st.chat_input("Ask AI, or type 'run myapp'"):
                                 run_summary_md += f"* ❌ Git operations failed: {str(e)}\n"
                                 status_placeholder.error("Git operations failed.")
                                 git_success = False
-                    elif robot_path_valid: # Only add skip message if tests were actually run and failed
+                    if robot_path_valid: # Only add skip message if tests were actually run and failed
                          run_summary_md += "* ⏭️ Skipping Git operations due to failed tests.\n"
                          status_placeholder.warning("Skipping Git operations due to failed tests.")
 
