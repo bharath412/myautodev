@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<robot generator="Robot 6.1.1 (Python 3.13.2 on win32)" generated="20250416 12:52:35.482" rpa="false" schemaversion="4">
+<robot generator="Robot 6.1.1 (Python 3.13.2 on win32)" generated="20250416 23:02:03.152" rpa="false" schemaversion="4">
 <suite id="s1" name="Robotframework" source="E:\ERP\dev\CursorAI2\myautodev\src\test\robotframework">
 <suite id="s1-s1" name="Employee Tests" source="E:\ERP\dev\CursorAI2\myautodev\src\test\robotframework\employee_tests.robot">
 <kw name="Setup Test Suite" type="SETUP">
 <kw name="Set Selenium Timeout" library="SeleniumLibrary">
 <arg>30 seconds</arg>
 <doc>Sets the timeout that is used by various keywords.</doc>
-<status status="PASS" starttime="20250416 12:52:39.131" endtime="20250416 12:52:39.132"/>
+<status status="PASS" starttime="20250416 23:02:06.645" endtime="20250416 23:02:06.646"/>
 </kw>
 <kw name="Set Selenium Speed" library="SeleniumLibrary">
 <arg>0.2 seconds</arg>
 <doc>Sets the delay that is waited after each Selenium command.</doc>
-<status status="PASS" starttime="20250416 12:52:39.132" endtime="20250416 12:52:39.133"/>
+<status status="PASS" starttime="20250416 23:02:06.646" endtime="20250416 23:02:06.647"/>
 </kw>
 <kw name="Set Selenium Implicit Wait" library="SeleniumLibrary">
 <arg>5 seconds</arg>
 <doc>Sets the implicit wait value used by Selenium.</doc>
-<status status="PASS" starttime="20250416 12:52:39.133" endtime="20250416 12:52:39.134"/>
+<status status="PASS" starttime="20250416 23:02:06.647" endtime="20250416 23:02:06.647"/>
 </kw>
 <kw name="Create Session" library="RequestsLibrary">
 <arg>employee_api</arg>
@@ -24,37 +24,37 @@
 <arg>verify=True</arg>
 <arg>disable_warnings=1</arg>
 <doc>Create Session: create a HTTP session to a server</doc>
-<msg timestamp="20250416 12:52:39.135" level="INFO">Creating Session using : alias=employee_api, url=http://localhost:8081, headers={},                     cookies={}, auth=None, timeout=None, proxies=None, verify=True,                     debug=0 </msg>
-<status status="PASS" starttime="20250416 12:52:39.134" endtime="20250416 12:52:39.135"/>
+<msg timestamp="20250416 23:02:06.648" level="INFO">Creating Session using : alias=employee_api, url=http://localhost:8081, headers={},                     cookies={}, auth=None, timeout=None, proxies=None, verify=True,                     debug=0 </msg>
+<status status="PASS" starttime="20250416 23:02:06.648" endtime="20250416 23:02:06.649"/>
 </kw>
 <kw name="Open Browser" library="SeleniumLibrary">
 <arg>${FRONTEND_URL}</arg>
 <arg>${BROWSER}</arg>
 <doc>Opens a new browser instance to the optional ``url``.</doc>
-<msg timestamp="20250416 12:52:39.137" level="INFO">Opening browser 'edge' to base url 'http://localhost:8081'.</msg>
-<status status="PASS" starttime="20250416 12:52:39.135" endtime="20250416 12:52:45.294"/>
+<msg timestamp="20250416 23:02:06.650" level="INFO">Opening browser 'edge' to base url 'http://localhost:8081'.</msg>
+<status status="PASS" starttime="20250416 23:02:06.649" endtime="20250416 23:02:11.116"/>
 </kw>
 <kw name="Maximize Browser Window" library="SeleniumLibrary">
 <doc>Maximizes current browser window.</doc>
-<status status="PASS" starttime="20250416 12:52:45.294" endtime="20250416 12:52:45.924"/>
+<status status="PASS" starttime="20250416 23:02:11.117" endtime="20250416 23:02:11.435"/>
 </kw>
 <kw name="Set Window Size" library="SeleniumLibrary">
 <arg>1920</arg>
 <arg>1080</arg>
 <doc>Sets current windows size to given ``width`` and ``height``.</doc>
-<status status="PASS" starttime="20250416 12:52:45.926" endtime="20250416 12:52:47.044"/>
+<status status="PASS" starttime="20250416 23:02:11.435" endtime="20250416 23:02:12.302"/>
 </kw>
 <kw name="Sleep" library="BuiltIn">
 <arg>1s</arg>
 <doc>Pauses the test executed for the given time.</doc>
-<msg timestamp="20250416 12:52:48.046" level="INFO">Slept 1 second</msg>
-<status status="PASS" starttime="20250416 12:52:47.044" endtime="20250416 12:52:48.046"/>
+<msg timestamp="20250416 23:02:13.303" level="INFO">Slept 1 second</msg>
+<status status="PASS" starttime="20250416 23:02:12.302" endtime="20250416 23:02:13.304"/>
 </kw>
 <kw name="Log" library="BuiltIn">
 <arg>Starting test suite on ${BASE_URL}</arg>
 <doc>Logs the given message with the given level.</doc>
-<msg timestamp="20250416 12:52:48.047" level="INFO">Starting test suite on http://localhost:8081</msg>
-<status status="PASS" starttime="20250416 12:52:48.046" endtime="20250416 12:52:48.047"/>
+<msg timestamp="20250416 23:02:13.304" level="INFO">Starting test suite on http://localhost:8081</msg>
+<status status="PASS" starttime="20250416 23:02:13.304" endtime="20250416 23:02:13.304"/>
 </kw>
 <kw name="GET On Session" library="RequestsLibrary">
 <var>${response}</var>
@@ -62,115 +62,115 @@
 <arg>/api/employees</arg>
 <arg>expected_status=any</arg>
 <doc>Sends a GET request on a previously created HTTP Session.</doc>
-<msg timestamp="20250416 12:52:48.094" level="INFO">GET Request : url=http://localhost:8081/api/employees 
+<msg timestamp="20250416 23:02:13.319" level="INFO">GET Request : url=http://localhost:8081/api/employees 
  path_url=/api/employees 
  headers={'User-Agent': 'python-requests/2.32.3', 'Accept-Encoding': 'gzip, deflate, zstd', 'Accept': '*/*', 'Connection': 'keep-alive'} 
  body=None 
  </msg>
-<msg timestamp="20250416 12:52:48.094" level="INFO">GET Response : url=http://localhost:8081/api/employees 
+<msg timestamp="20250416 23:02:13.319" level="INFO">GET Response : url=http://localhost:8081/api/employees 
  status=200, reason= 
- headers={'Content-Type': 'application/json', 'Transfer-Encoding': 'chunked', 'Date': 'Wed, 16 Apr 2025 07:22:48 GMT', 'Keep-Alive': 'timeout=60', 'Connection': 'keep-alive'} 
+ headers={'Content-Type': 'application/json', 'Transfer-Encoding': 'chunked', 'Date': 'Wed, 16 Apr 2025 17:32:13 GMT', 'Keep-Alive': 'timeout=60', 'Connection': 'keep-alive'} 
  body=[] 
  </msg>
-<msg timestamp="20250416 12:52:48.094" level="INFO">${response} = &lt;Response [200]&gt;</msg>
-<status status="PASS" starttime="20250416 12:52:48.047" endtime="20250416 12:52:48.094"/>
+<msg timestamp="20250416 23:02:13.320" level="INFO">${response} = &lt;Response [200]&gt;</msg>
+<status status="PASS" starttime="20250416 23:02:13.304" endtime="20250416 23:02:13.320"/>
 </kw>
 <kw name="Log" library="BuiltIn">
 <arg>API Response Status: ${response.status_code}</arg>
 <doc>Logs the given message with the given level.</doc>
-<msg timestamp="20250416 12:52:48.097" level="INFO">API Response Status: 200</msg>
-<status status="PASS" starttime="20250416 12:52:48.095" endtime="20250416 12:52:48.097"/>
+<msg timestamp="20250416 23:02:13.322" level="INFO">API Response Status: 200</msg>
+<status status="PASS" starttime="20250416 23:02:13.320" endtime="20250416 23:02:13.322"/>
 </kw>
 <kw name="Run Keyword If" library="BuiltIn">
 <arg>'${response.status_code}' != '200'</arg>
 <arg>Fatal Error</arg>
 <arg>API not responding correctly</arg>
 <doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
-<status status="PASS" starttime="20250416 12:52:48.097" endtime="20250416 12:52:48.103"/>
+<status status="PASS" starttime="20250416 23:02:13.322" endtime="20250416 23:02:13.324"/>
 </kw>
-<status status="PASS" starttime="20250416 12:52:39.130" endtime="20250416 12:52:48.104"/>
+<status status="PASS" starttime="20250416 23:02:06.645" endtime="20250416 23:02:13.325"/>
 </kw>
 <test id="s1-s1-t1" name="Verify Page Title" line="138">
 <kw name="Go To" library="SeleniumLibrary">
 <arg>${FRONTEND_URL}</arg>
 <doc>Navigates the current browser window to the provided ``url``.</doc>
-<msg timestamp="20250416 12:52:48.114" level="INFO">Opening url 'http://localhost:8081'</msg>
-<status status="PASS" starttime="20250416 12:52:48.113" endtime="20250416 12:52:48.644"/>
+<msg timestamp="20250416 23:02:13.327" level="INFO">Opening url 'http://localhost:8081'</msg>
+<status status="PASS" starttime="20250416 23:02:13.326" endtime="20250416 23:02:13.632"/>
 </kw>
 <kw name="Get Title" library="SeleniumLibrary">
 <var>${title}</var>
 <doc>Returns the title of the current page.</doc>
-<msg timestamp="20250416 12:52:48.855" level="INFO">${title} = Employee Management</msg>
-<status status="PASS" starttime="20250416 12:52:48.644" endtime="20250416 12:52:48.856"/>
+<msg timestamp="20250416 23:02:13.899" level="INFO">${title} = Employee Management</msg>
+<status status="PASS" starttime="20250416 23:02:13.633" endtime="20250416 23:02:13.899"/>
 </kw>
 <kw name="Should Be Equal" library="BuiltIn">
 <arg>${title}</arg>
 <arg>Employee Management</arg>
 <doc>Fails if the given objects are unequal.</doc>
-<status status="PASS" starttime="20250416 12:52:48.856" endtime="20250416 12:52:48.857"/>
+<status status="PASS" starttime="20250416 23:02:13.899" endtime="20250416 23:02:13.900"/>
 </kw>
 <kw name="Title Should Be" library="SeleniumLibrary">
 <arg>Employee Management</arg>
 <doc>Verifies that the current page title equals ``title``.</doc>
-<msg timestamp="20250416 12:52:49.074" level="INFO">Page title is 'Employee Management'.</msg>
-<status status="PASS" starttime="20250416 12:52:48.857" endtime="20250416 12:52:49.074"/>
+<msg timestamp="20250416 23:02:14.110" level="INFO">Page title is 'Employee Management'.</msg>
+<status status="PASS" starttime="20250416 23:02:13.900" endtime="20250416 23:02:14.110"/>
 </kw>
-<status status="PASS" starttime="20250416 12:52:48.104" endtime="20250416 12:52:49.075"/>
+<status status="PASS" starttime="20250416 23:02:13.325" endtime="20250416 23:02:14.111"/>
 </test>
 <test id="s1-s1-t2" name="Verify Navigation" line="144">
 <kw name="Go To" library="SeleniumLibrary">
 <arg>${FRONTEND_URL}</arg>
 <doc>Navigates the current browser window to the provided ``url``.</doc>
-<msg timestamp="20250416 12:52:49.093" level="INFO">Opening url 'http://localhost:8081'</msg>
-<status status="PASS" starttime="20250416 12:52:49.092" endtime="20250416 12:52:49.496"/>
+<msg timestamp="20250416 23:02:14.114" level="INFO">Opening url 'http://localhost:8081'</msg>
+<status status="PASS" starttime="20250416 23:02:14.113" endtime="20250416 23:02:14.437"/>
 </kw>
 <kw name="Wait Until Element Is Visible" library="SeleniumLibrary">
 <arg>${NAVBAR_BRAND}</arg>
 <doc>Waits until the element ``locator`` is visible.</doc>
-<status status="PASS" starttime="20250416 12:52:49.496" endtime="20250416 12:52:49.987"/>
+<status status="PASS" starttime="20250416 23:02:14.438" endtime="20250416 23:02:14.916"/>
 </kw>
 <kw name="Element Text Should Be" library="SeleniumLibrary">
 <arg>${NAVBAR_BRAND}</arg>
 <arg>Employee Management</arg>
 <doc>Verifies that element ``locator`` contains exact the text ``expected``.</doc>
-<msg timestamp="20250416 12:52:49.989" level="INFO">Verifying element 'css:.navbar-brand' contains exact text 'Employee Management'.</msg>
-<status status="PASS" starttime="20250416 12:52:49.987" endtime="20250416 12:52:50.462"/>
+<msg timestamp="20250416 23:02:14.919" level="INFO">Verifying element 'css:.navbar-brand' contains exact text 'Employee Management'.</msg>
+<status status="PASS" starttime="20250416 23:02:14.917" endtime="20250416 23:02:15.381"/>
 </kw>
 <kw name="Element Should Be Visible" library="SeleniumLibrary">
 <arg>${ADD_EMPLOYEE_NAV}</arg>
 <doc>Verifies that the element identified by ``locator`` is visible.</doc>
-<msg timestamp="20250416 12:52:50.913" level="INFO">Element 'id:addEmployeeNav' is displayed.</msg>
-<status status="PASS" starttime="20250416 12:52:50.462" endtime="20250416 12:52:50.913"/>
+<msg timestamp="20250416 23:02:15.857" level="INFO">Element 'id:addEmployeeNav' is displayed.</msg>
+<status status="PASS" starttime="20250416 23:02:15.381" endtime="20250416 23:02:15.857"/>
 </kw>
 <kw name="Element Should Be Visible" library="SeleniumLibrary">
 <arg>${EMPLOYEE_LIST_NAV}</arg>
 <doc>Verifies that the element identified by ``locator`` is visible.</doc>
-<msg timestamp="20250416 12:52:51.357" level="INFO">Element 'id:employeeListNav' is displayed.</msg>
-<status status="PASS" starttime="20250416 12:52:50.913" endtime="20250416 12:52:51.358"/>
+<msg timestamp="20250416 23:02:16.298" level="INFO">Element 'id:employeeListNav' is displayed.</msg>
+<status status="PASS" starttime="20250416 23:02:15.858" endtime="20250416 23:02:16.298"/>
 </kw>
 <kw name="Element Text Should Be" library="SeleniumLibrary">
 <arg>${ADD_EMPLOYEE_NAV}</arg>
 <arg>Add Employee</arg>
 <doc>Verifies that element ``locator`` contains exact the text ``expected``.</doc>
-<msg timestamp="20250416 12:52:51.361" level="INFO">Verifying element 'id:addEmployeeNav' contains exact text 'Add Employee'.</msg>
-<status status="PASS" starttime="20250416 12:52:51.358" endtime="20250416 12:52:51.807"/>
+<msg timestamp="20250416 23:02:16.300" level="INFO">Verifying element 'id:addEmployeeNav' contains exact text 'Add Employee'.</msg>
+<status status="PASS" starttime="20250416 23:02:16.299" endtime="20250416 23:02:16.738"/>
 </kw>
 <kw name="Element Text Should Be" library="SeleniumLibrary">
 <arg>${EMPLOYEE_LIST_NAV}</arg>
 <arg>Employee List</arg>
 <doc>Verifies that element ``locator`` contains exact the text ``expected``.</doc>
-<msg timestamp="20250416 12:52:51.811" level="INFO">Verifying element 'id:employeeListNav' contains exact text 'Employee List'.</msg>
-<status status="PASS" starttime="20250416 12:52:51.808" endtime="20250416 12:52:52.259"/>
+<msg timestamp="20250416 23:02:16.739" level="INFO">Verifying element 'id:employeeListNav' contains exact text 'Employee List'.</msg>
+<status status="PASS" starttime="20250416 23:02:16.738" endtime="20250416 23:02:17.174"/>
 </kw>
-<status status="PASS" starttime="20250416 12:52:49.076" endtime="20250416 12:52:52.260"/>
+<status status="PASS" starttime="20250416 23:02:14.112" endtime="20250416 23:02:17.174"/>
 </test>
 <kw name="Close All Browsers" library="SeleniumLibrary" type="TEARDOWN">
 <doc>Closes all open browsers and resets the browser cache.</doc>
-<status status="PASS" starttime="20250416 12:52:52.262" endtime="20250416 12:52:54.842"/>
+<status status="PASS" starttime="20250416 23:02:17.176" endtime="20250416 23:02:19.690"/>
 </kw>
-<status status="PASS" starttime="20250416 12:52:35.533" endtime="20250416 12:52:54.842"/>
+<status status="PASS" starttime="20250416 23:02:03.209" endtime="20250416 23:02:19.690"/>
 </suite>
-<status status="PASS" starttime="20250416 12:52:35.484" endtime="20250416 12:52:54.844"/>
+<status status="PASS" starttime="20250416 23:02:03.155" endtime="20250416 23:02:19.692"/>
 </suite>
 <statistics>
 <total>

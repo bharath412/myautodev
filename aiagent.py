@@ -85,7 +85,7 @@ def find_project_file(filename_or_path):
                 return target_path_obj
     except ValueError: # Not relative to project root
         pass
-    except SecurityError: # Handle potential security issues with is_relative_to
+    except PermissionError: # Handle potential security issues with is_relative_to
         st.warning(f"Security check failed for path: {filename_or_path}")
         return None
 
@@ -724,108 +724,18 @@ if prompt := st.chat_input("Ask AI, or type 'run myapp'"):
                         status_placeholder.info("Running Git operations...") # Update status area
                         status_placeholder.markdown(run_summary_md) # Update summary display
                         result = git_operations.execute_git_flow(PROJECT_ROOT, GIT_COMMIT_MESSAGE, "")
-                    if isinstance(result, tuple) and len(result) == 2 and isinstance(result[1], str):
-                        run_summary_md += result[1]
-                        if git_operations.deploy_to_heroku_separate_terminal(PROJECT_ROOT):
-                            run_summary_md += "* Deploying App .."
-                            #st.success(f"Attempted to deploy to Heroku from a new terminal in: {PROJECT_ROOT}")
+                        
+                        if isinstance(result, tuple) and len(result) == 2:
+                            success, message = result
+                            run_summary_md += message
+                            
+                            if success and git_operations.deploy_to_heroku_separate_terminal(PROJECT_ROOT):
+                                run_summary_md += "* ✅ Initiated Heroku deployment from new terminal\n"
+                            else:
+                                run_summary_md += "* ❌ Failed to initiate Heroku deployment\n"
                         else:
-                            st.error(f"Failed to open a new terminal to deploy to Heroku from: {PROJECT_ROOT}")
-
-                    else:
-                        # Handle the case where the return is not the expected tuple
-                        print(f"Warning: execute_git_flow returned unexpected type or format: {type(result)}, value: {result}")
-                        # You might want to assign an empty string or handle this differently
-                        pass
-                    
-                        
-                        # Create a placeholder for git status updates
-                        git_status_placeholder = st.empty()
-                        
-                        # Ensure we have a valid placeholder
-                        if git_status_placeholder:
-                            try:
-                                # Create a container for git operations
-                                with st.container() as git_container:
-                                    if git_container:
-                                        st.info(f"Attempting git operations in directory: {PROJECT_ROOT}")
-                                        
-                                        # Initialize git operations
-                                        git_success = True
-                                        git_output = ""
-                                        
-                                        # Before running git commands, check configuration
-                                        git_config_ok, git_config_msg = git_operations.execute_git_flow(PROJECT_ROOT, GIT_COMMIT_MESSAGE, "")
-                                        if not git_config_ok:
-                                            git_status_placeholder.error(f"Git configuration error: {git_config_msg}")
-                                            run_summary_md += f"* ❌ Git operations failed: {git_config_msg}\n"
-                                            status_placeholder.error("Git configuration error.")
-                                        else:
-                                            # Initialize git operations
-                                            git_success = True
-                                            git_output = ""
-                                            
-                                            # 1. Git Status (check for changes)
-                                            status_output, status_success = git_operations.run_git_command(
-                                                ["git", "status"], PROJECT_ROOT, git_status_placeholder
-                                            )
-                                            git_output += status_output
-                                            
-                                            if "nothing to commit" in status_output:
-                                                git_status_placeholder.info("No changes to commit")
-                                                run_summary_md += "* ℹ️ No changes to commit\n"
-                                            else:
-                                                # 2. Git Add
-                                                add_output, add_success = git_operations.run_git_command(
-                                                    ["git", "add", "."], PROJECT_ROOT, git_status_placeholder
-                                                )
-                                                git_output += "\n" + add_output
-                                                git_success = git_success and add_success
-                                                
-                                                if add_success:
-                                                    # 3. Git Commit
-                                                    commit_output, commit_success = git_operations.run_git_command(
-                                                        ["git", "commit", "-m", GIT_COMMIT_MESSAGE], PROJECT_ROOT, git_status_placeholder
-                                                    )
-                                                    git_output += "\n" + commit_output
-                                                    git_success = git_success and commit_success
-                                                    
-                                                    if commit_success:
-                                                        # 4. Git Pull before Push (to avoid conflicts)
-                                                        pull_output, pull_success = git_operations.run_git_command(
-                                                            ["git", "pull", "origin", "main"], PROJECT_ROOT, git_status_placeholder
-                                                        )
-                                                        git_output += "\n" + pull_output
-                                                        
-                                                        # 5. Git Push
-                                                        push_output, push_success = git_operations.run_git_command(
-                                                            ["git", "push", "origin", "main"], PROJECT_ROOT, git_status_placeholder
-                                                        )
-                                                        git_output += "\n" + push_output
-                                                        git_success = git_success and push_success
-
-                                            # Display results
-                                            if git_success:
-                                                git_status_placeholder.success("✅ All git operations completed successfully!")
-                                                run_summary_md += "* ✅ Git operations completed successfully.\n"
-                                                status_placeholder.success("Git operations completed.")
-                                            else:
-                                                git_status_placeholder.error("❌ One or more git operations failed.")
-                                                run_summary_md += "* ❌ Git operations failed.\n"
-                                                status_placeholder.error("Git operations failed.")
-                                            
-                                            # Show detailed output
-                                            git_status_placeholder.markdown(f"```\n{git_output}\n```")
-                                        
-                            except Exception as e:
-                                git_status_placeholder.error(f"❌ Error during git operations: {str(e)}")
-                                run_summary_md += f"* ❌ Git operations failed: {str(e)}\n"
-                                status_placeholder.error("Git operations failed.")
-                                git_success = False
-                        elif robot_path_valid: # Only add skip message if tests were actually run and failed
-                            run_summary_md += "* ⏭️ Skipping Git operations due to failed tests.\n"
-                            status_placeholder.warning("Skipping Git operations due to failed tests.")
-
+                            run_summary_md += "* ❌ Git operations returned unexpected result\n"
+                            st.error(f"Git operations returned unexpected format: {result}")
 
                 else: # Port not active
                     status_placeholder.error(f"Port {port_to_check} did not become active. Check application terminal. Skipping tests & Git.")
