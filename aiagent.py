@@ -723,7 +723,7 @@ if prompt := st.chat_input("Ask AI, or type 'run myapp'"):
                         run_summary_md += "* ▶️ Running Git operations (add, commit, push)...\n"
                         status_placeholder.info("Running Git operations...") # Update status area
                         status_placeholder.markdown(run_summary_md) # Update summary display
-
+                        git_operations.execute_git_flow(PROJECT_ROOT, GIT_COMMIT_MESSAGE, "")
                         # Create a placeholder for git status updates
                         git_status_placeholder = st.empty()
                         
@@ -740,7 +740,7 @@ if prompt := st.chat_input("Ask AI, or type 'run myapp'"):
                                         git_output = ""
                                         
                                         # Before running git commands, check configuration
-                                        git_config_ok, git_config_msg = git_operations.ensure_git_configured(PROJECT_ROOT)
+                                        git_config_ok, git_config_msg = git_operations.execute_git_flow(PROJECT_ROOT, GIT_COMMIT_MESSAGE, "")
                                         if not git_config_ok:
                                             git_status_placeholder.error(f"Git configuration error: {git_config_msg}")
                                             run_summary_md += f"* ❌ Git operations failed: {git_config_msg}\n"
